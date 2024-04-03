@@ -1,11 +1,15 @@
 <script>
+
 export default {
     name: 'MovieCard',
     props: {
         title: String,
         originalTitle: String,
         language: String,
-        vote: Number
+        vote: Number,
+    },
+    mounted() {
+        // console.log(this.language);
     }
 }
 </script>
@@ -17,16 +21,21 @@ export default {
                 Titolo: {{ title }}
             </li>
             <li>
-                Titolo originale: {{ original_title }}
+                Titolo originale: {{ originalTitle }}
             </li>
             <li>
-                Lingua: {{ original_language }}
+                Lingua: {{ language }}
+                <span :class="`lang-icon lang-icon-${language}`"></span>
             </li>
             <li>
-                Voto: {{ vote_average }}
+                Voto: {{ vote }}
             </li>
         </ul>
     </li>
 </template>
 
-<style></style>
+<style>
+.lang-icon {
+    background-image: url(../../node_modules/@textabledev/langs-flags-list/lang-flags.png);
+}
+</style>
