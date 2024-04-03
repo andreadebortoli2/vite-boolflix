@@ -11,13 +11,22 @@ export default {
         }
     },
     methods: {
-        searchMovie(text) {
-            // console.log(store.moviesList);
-            axios.get(`https://api.themoviedb.org/3/search/movie?api_key=7c7d2baca05b9819b69763a53ed1d49d&query=${text}&language=it-IT`).then(response => {
-                // console.log(response);
-                this.store.moviesList = response.data.results
-                // console.log(store.moviesList);
-            })
+
+        searchContent(text) {
+
+            axios.get(`https://api.themoviedb.org/3/search/movie?api_key=7c7d2baca05b9819b69763a53ed1d49d&language=it-IT&query=${text}`).then(response => {
+                // console.log(response.data.results);
+
+                response.data.results.forEach(movie => { this.store.searchedList.push(movie) });
+            });
+
+            axios.get(`https://api.themoviedb.org/3/search/tv?api_key=7c7d2baca05b9819b69763a53ed1d49d&language=it_IT&query=${text}`).then(response => {
+                // console.log(response.data.results);
+
+                response.data.results.forEach(tv => this.store.searchedList.push(tv));
+            });
+
+            // console.log(store.searchedList);
         }
     },
     mounted() {
@@ -29,7 +38,7 @@ export default {
 <template>
     <div>
         <input type="text" v-model="searchText" placeholder="Write the title you looking for">
-        <button @click="searchMovie(searchText)">Search</button>
+        <button @click="searchContent(searchText)">Search</button>
     </div>
 
 </template>
