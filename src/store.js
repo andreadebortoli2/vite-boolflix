@@ -6,14 +6,16 @@ export const store = reactive({
     tvUrl: 'https://api.themoviedb.org/3/search/tv',
     apiKey: '7c7d2baca05b9819b69763a53ed1d49d',
     languageFilter: 'language=it_IT',
+    posterImgUrl: 'http://image.tmdb.org/t/p',
+    posterSize: 'w92',
     searchText: '',
     searchedList: [],
     searchContent() {
+        this.searchedList = [];
 
         const searchMovieUrl = `${this.movieUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
 
         const searchtvUrl = `${this.tvUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
-
 
         axios.get(searchMovieUrl).then(response => {
             // console.log(response.data.results);

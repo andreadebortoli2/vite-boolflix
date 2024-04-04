@@ -1,8 +1,10 @@
 <script>
+import { store } from '../store';
 
 export default {
     name: 'MovieCard',
     props: {
+        image: String,
         title: String,
         name: String,
         originalTitle: String,
@@ -10,14 +12,23 @@ export default {
         language: String,
         vote: Number,
     },
+    data() {
+        return {
+            store,
+            posterSrc: `${store.posterImgUrl}/${store.posterSize}/${this.image}`,
+        }
+    },
     mounted() {
-        // console.log(this.language);
+        // console.log(this.posterSrc);
     }
 }
 </script>
 
 <template>
     <ul>
+        <li>
+            <img :src="posterSrc" alt="">
+        </li>
         <li>
             Titolo: {{ title }} {{ name }}
         </li>
