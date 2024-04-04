@@ -16,10 +16,24 @@ export default {
         return {
             store,
             posterSrc: `${store.posterImgUrl}/${store.posterSize}/${this.image}`,
+            fullStarCount: '',
+            emptyStarsCount: '',
+        }
+    },
+    methods: {
+        calcFullStars() {
+            this.fullStarCount = Math.ceil(this.vote / 2)
+        },
+        calcEmptyStars() {
+            this.emptyStarsCount = 5 - this.fullStarCount
         }
     },
     mounted() {
         // console.log(this.posterSrc);
+        this.calcFullStars();
+        this.calcEmptyStars();
+        // console.log(this.fullStarCount);
+        // console.log(this.emptyStarsCount);
     }
 }
 </script>
@@ -40,7 +54,9 @@ export default {
             <span :class="`lang-icon lang-icon-${language}`"></span>
         </li>
         <li>
-            Voto: {{ vote }}
+            Voto: {{ fullStarCount }} / 5
+            <span v-for="n in fullStarCount"><i class="fa-solid fa-star"></i></span>
+            <span v-for="n in emptyStarsCount"><i class="fa-regular fa-star"></i></span>
         </li>
         <li v-if="title">Movie</li>
         <li v-if="name">TV</li>
