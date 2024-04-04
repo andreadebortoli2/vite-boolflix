@@ -1,0 +1,14 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: cadetblue;
+    font-family: "Roboto", sans-serif;
+}
+
+.container {
+    padding: 1.5rem 1rem;
+}

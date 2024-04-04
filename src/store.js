@@ -7,7 +7,7 @@ export const store = reactive({
     apiKey: '7c7d2baca05b9819b69763a53ed1d49d',
     languageFilter: 'language=it_IT',
     posterImgUrl: 'http://image.tmdb.org/t/p',
-    posterSize: 'w92',
+    posterSize: 'w342',
     searchText: '',
     searchedList: [],
     searchContent() {
