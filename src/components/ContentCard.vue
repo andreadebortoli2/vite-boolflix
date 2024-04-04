@@ -43,17 +43,29 @@ export default {
     <div class="card">
         <img v-if="image" :src="posterSrc" alt="">
         <ul>
-            <li>
+            <li v-if="title">
                 <span class="bold">
                     Titolo:
                 </span>
-                {{ title }} {{ name }}
+                {{ title }}
             </li>
-            <li class="original_title">
+            <li v-if="name">
+                <span class="bold">
+                    Titolo:
+                </span>
+                {{ name }}
+            </li>
+            <li class="original_title" v-if="title !== originalTitle">
                 <span class="bold">
                     Titolo originale:
                 </span>
-                {{ originalTitle }} {{ originalName }}
+                {{ originalTitle }}
+            </li>
+            <li class="original_title" v-if="name !== originalName">
+                <span class="bold">
+                    Titolo originale:
+                </span>
+                {{ originalName }}
             </li>
             <li v-if="vote">
                 <span class="bold">
