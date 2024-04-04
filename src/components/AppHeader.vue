@@ -46,7 +46,7 @@ export default {
         color: ivory;
         font-size: 3rem;
         background-color: cadetblue;
-        padding: 1rem;
+        padding: 1rem 2rem;
         border-radius: 3rem;
     }
 

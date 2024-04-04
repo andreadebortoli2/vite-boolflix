@@ -9,26 +9,32 @@ export const store = reactive({
     posterImgUrl: 'http://image.tmdb.org/t/p',
     posterSize: 'w342',
     searchText: '',
-    searchedList: [],
+    searchedList: null,
     searchContent() {
-        this.searchedList = [];
+        if (this.searchText !== '') {
 
-        const searchMovieUrl = `${this.movieUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
+            this.searchedList = [];
 
-        const searchtvUrl = `${this.tvUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
+            const searchMovieUrl = `${this.movieUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
 
-        axios.get(searchMovieUrl).then(response => {
-            // console.log(response.data.results);
+            const searchtvUrl = `${this.tvUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
 
-            response.data.results.forEach(movie => { this.searchedList.push(movie) });
-        });
+            axios.get(searchMovieUrl).then(response => {
+                // console.log(response.data.results);
 
-        axios.get(searchtvUrl).then(response => {
-            // console.log(response.data.results);
+                response.data.results.forEach(movie => { this.searchedList.push(movie) });
+            });
 
-            response.data.results.forEach(tv => this.searchedList.push(tv));
-        });
+            axios.get(searchtvUrl).then(response => {
+                // console.log(response.data.results);
 
-        // console.log(store.searchedList);
-    }
+                response.data.results.forEach(tv => this.searchedList.push(tv));
+            });
+
+            // console.log(store.searchedList);
+
+        } else {
+            this.searchedList = null;
+        };
+    },
 })
