@@ -68,7 +68,7 @@ export default {
             outline: 0;
 
             &:focus {
-                border-bottom: 1px solid azure;
+                border-bottom: 2px solid azure;
                 border-radius: 0.5rem;
             }
 

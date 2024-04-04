@@ -10,6 +10,8 @@ export const store = reactive({
     posterSize: 'w342',
     searchText: '',
     searchedList: null,
+    movieCastApiUrl: 'https://api.themoviedb.org/3/movie/',
+    tvCastApiUrl: 'https://api.themoviedb.org/3/tv/',
     searchContent() {
         if (this.searchText !== '') {
 

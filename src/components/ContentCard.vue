@@ -1,9 +1,11 @@
 <script>
 import { store } from '../store';
+import axios from 'axios';
 
 export default {
     name: 'MovieCard',
     props: {
+        id: Number,
         image: String,
         title: String,
         name: String,
@@ -19,6 +21,7 @@ export default {
             posterSrc: `${store.posterImgUrl}/${store.posterSize}/${this.image}`,
             fullStarCount: '',
             emptyStarsCount: '',
+            cast: [],
         }
     },
     methods: {
@@ -27,6 +30,35 @@ export default {
         },
         calcEmptyStars() {
             this.emptyStarsCount = 5 - this.fullStarCount
+        },
+        castRequest(url) {
+
+            const castUrl = `${url}${this.id}/credits?api_key=${store.apiKey}`;
+
+            // console.log(castUrl);
+
+            axios.get(castUrl).then((response) => {
+
+                // console.log(response.data.cast);
+
+                response.data.cast.forEach(actor => {
+                    this.cast.push(actor.name);
+                });
+
+                // console.log(this.cast);
+
+                if (this.cast.length > 5) {
+                    this.cast.length = 5;
+                    // console.log(this.cast);
+                };
+            });
+        },
+        displayCast() {
+            if (this.name === undefined) {
+                this.castRequest(store.movieCastApiUrl);
+            } else if (this.title === undefined) {
+                this.castRequest(store.tvCastApiUrl);
+            };
         }
     },
     mounted() {
@@ -35,6 +67,8 @@ export default {
         this.calcEmptyStars();
         // console.log(this.fullStarCount);
         // console.log(this.emptyStarsCount);
+        // console.log(this.id);
+        this.displayCast()
     }
 }
 </script>
@@ -44,39 +78,29 @@ export default {
         <img v-if="image" :src="posterSrc" alt="">
         <ul>
             <li v-if="title">
-                <span class="bold">
-                    Titolo:
-                </span>
-                {{ title }}
+                <span class="bold">Titolo:</span> {{ title }}
             </li>
             <li v-if="name">
-                <span class="bold">
-                    Titolo:
-                </span>
-                {{ name }}
+                <span class="bold">Titolo:</span> {{ name }}
             </li>
             <li class="original_title" v-if="title !== originalTitle">
-                <span class="bold">
-                    Titolo originale:
-                </span>
-                {{ originalTitle }}
+                <span class="bold">Titolo originale:</span> {{ originalTitle }}
             </li>
             <li class="original_title" v-if="name !== originalName">
-                <span class="bold">
-                    Titolo originale:
-                </span>
-                {{ originalName }}
+                <span class="bold">Titolo originale:</span> {{ originalName }}
             </li>
             <li v-if="vote">
-                <span class="bold">
-                    Voto:
-                </span>
+                <span class="bold">Voto:</span>
                 <span v-for="n in fullStarCount"><i class="fa-solid fa-star"></i></span>
                 <span v-for="n in emptyStarsCount"><i class="fa-regular fa-star"></i></span>
             </li>
             <li v-if="overview" class="overview">
-                <span class="bold">Trama:</span>
-                {{ overview }}
+                <span class="bold">Trama:</span> {{ overview }}
+            </li>
+            <li class="cast" v-if="cast.length > 0">
+                <span class="bold">Cast: </span>
+                <span v-for="actor in cast"> {{ actor }}, </span>
+                <span> ...</span>
             </li>
             <li v-if="language" class="language">
                 <span :class="`lang-icon lang-icon-${language}`"></span>
