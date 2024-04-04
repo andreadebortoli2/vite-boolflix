@@ -16,10 +16,10 @@ export default {
 </script>
 
 <template>
-    <ul class="sarech_response" v-for="content in store.searchedList">
+    <div class="sarech_response" v-for="content in store.searchedList">
         <ContentCard :title="content.title" :name="content.name" :originalTitle="content.original_title"
             :originalName="content.original_name" :language="content.original_language" :vote="content.vote_average" />
-    </ul>
+    </div>
 </template>
 
 

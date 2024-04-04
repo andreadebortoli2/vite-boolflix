@@ -1,7 +1,32 @@
 import { reactive } from "vue";
+import axios from "axios";
 
 export const store = reactive({
-    movieApiUrl: 'https://api.themoviedb.org/3/search/movie?api_key=7c7d2baca05b9819b69763a53ed1d49d&language=it-IT&query=',
-    tvApiUrl: 'https://api.themoviedb.org/3/search/tv?api_key=7c7d2baca05b9819b69763a53ed1d49d&language=it_IT&query=',
+    movieUrl: 'https://api.themoviedb.org/3/search/movie',
+    tvUrl: 'https://api.themoviedb.org/3/search/tv',
+    apiKey: '7c7d2baca05b9819b69763a53ed1d49d',
+    languageFilter: 'language=it_IT',
+    searchText: '',
     searchedList: [],
+    searchContent() {
+
+        const searchMovieUrl = `${this.movieUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
+
+        const searchtvUrl = `${this.tvUrl}?api_key=${this.apiKey}&query=${this.searchText}&${this.languageFilter}`;
+
+
+        axios.get(searchMovieUrl).then(response => {
+            // console.log(response.data.results);
+
+            response.data.results.forEach(movie => { this.searchedList.push(movie) });
+        });
+
+        axios.get(searchtvUrl).then(response => {
+            // console.log(response.data.results);
+
+            response.data.results.forEach(tv => this.searchedList.push(tv));
+        });
+
+        // console.log(store.searchedList);
+    }
 })
