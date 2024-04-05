@@ -25,7 +25,6 @@ export default {
             </button>
         </div>
     </div>
-
 </template>
 
 
@@ -67,7 +66,7 @@ export default {
             }
 
             &::placeholder {
-                color: gainsboro;
+                color: ivory;
                 font-size: 1.2rem;
             }
         }

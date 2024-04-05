@@ -15,6 +15,7 @@ export default {
         castUrl: String,
         genreIds: Array,
         genresList: Array,
+        filterList: Array
     },
     data() {
         return {
@@ -24,15 +25,54 @@ export default {
             emptyStarsCount: '',
             cast: [],
             genres: [],
+            display: true,
         }
     },
+    watch: {
+        /**
+         * at the change of the list of filters change the visibility of the card
+         * @param {Array} newVal change on list of filters
+         * return display true or false
+         */
+        filterList(newVal) {
+            if (newVal.length === 0) {
+                // console.log('empty');
+                this.display = true;
+                // loop in filters list
+            } else if (newVal.length > 0) {
+                for (let i = 0; i < newVal.length; i++) {
+                    const val = newVal[i];
+                    // check for corrispondencies
+                    if (this.genreIds.includes(val) === true) {
+                        // console.log('ok');
+                        this.display = true;
+                        if (this.display === true) break;
+                    } else {
+                        // console.log('no');
+                        this.display = false;
+                    };
+                };
+            };
+        },
+    },
     methods: {
+        /**
+         * calc full stars for vote
+         */
         calcFullStars() {
             this.fullStarCount = Math.ceil(this.vote / 2);
         },
+        /**
+         * calc empty stars for vote
+         */
         calcEmptyStars() {
             this.emptyStarsCount = 5 - this.fullStarCount;
         },
+        /**
+         * 'axios' API call for cast (if actors are more then five cut the array)
+         * @param {String} url url for the call from store.js
+         * return array of actors
+         */
         castRequest(url) {
             const requestUrl = `${url}${this.id}/credits?api_key=${store.apiKey}`;
             // console.log(castUrl);
@@ -52,6 +92,9 @@ export default {
                     console.log(error);
                 });
         },
+        /**
+         * transform genres codes in strings
+         */
         transformGenres() {
             this.genreIds.forEach(id => {
                 this.genresList.forEach(genre => {
@@ -77,37 +120,47 @@ export default {
 </script>
 
 <template>
-    <div class="card">
+    <div class="card" v-if="display">
         <img v-if="image" :src="posterSrc" alt="">
+        <!-- / img -->
         <ul>
             <li v-if="language" class="language">
                 <span :class="`lang-icon lang-icon-${language}`"></span>
             </li>
+            <!-- / language_icon -->
             <li v-if="title">
                 <span class="bold">Titolo:</span>{{ title }}
             </li>
+            <!-- / title -->
             <li class="original_title" v-if="title !== originalTitle">
                 <span class="bold">Titolo originale:</span>{{ originalTitle }}
             </li>
+            <!-- / original_title -->
             <li v-if="vote">
                 <span class="bold">Voto:</span>
                 <span v-for="n in fullStarCount"><i class="fa-solid fa-star"></i></span>
+                <!-- / full_stars -->
                 <span v-for="n in emptyStarsCount"><i class="fa-regular fa-star"></i></span>
+                <!-- / empty_stars -->
             </li>
+            <!-- / vote -->
             <li v-if="overview" class="overview">
                 <span class="bold">Trama:</span>{{ overview }}
             </li>
+            <!-- / overview -->
             <li class="cast" v-if="cast.length > 0">
                 <span class="bold">Cast:</span>
                 <span v-for="actor in cast">{{ actor }}, </span>
                 <span> ...</span>
             </li>
+            <!-- / cast -->
             <li class="genres_list" v-if="genres.length > 0">
                 <div class="bold">Generi:</div>
                 <div class="genre">
                     <div v-for="genre in genres">{{ genre }}</div>
                 </div>
             </li>
+            <!-- / genres -->
         </ul>
     </div>
 </template>
@@ -137,7 +190,7 @@ export default {
     }
 
     ul {
-        /* display: none; */
+        display: none;
         background-color: rgba(0, 0, 0, 0.7);
         width: 100%;
         height: 100%;
