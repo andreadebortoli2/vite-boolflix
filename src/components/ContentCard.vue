@@ -12,6 +12,8 @@ export default {
         language: String,
         vote: Number,
         overview: String,
+        castUrl: String,
+        genreIds: Array,
     },
     data() {
         return {
@@ -31,32 +33,25 @@ export default {
         },
         castRequest(url) {
 
-            const castUrl = `${url}${this.id}/credits?api_key=${store.apiKey}`;
+            const requestUrl = `${url}${this.id}/credits?api_key=${store.apiKey}`;
 
             // console.log(castUrl);
 
-            axios.get(castUrl).then((response) => {
-
-                // console.log(response.data.cast);
-
-                response.data.cast.forEach(actor => {
-                    this.cast.push(actor.name);
-                });
-
-                // console.log(this.cast);
-
-                if (this.cast.length > 5) {
-                    this.cast.length = 5;
+            axios.get(requestUrl)
+                .then((response) => {
+                    // console.log(response.data.cast);
+                    response.data.cast.forEach(actor => {
+                        this.cast.push(actor.name);
+                    });
                     // console.log(this.cast);
-                };
-            });
-        },
-        displayCast() {
-            if (this.name === undefined) {
-                this.castRequest(store.movieCastApiUrl);
-            } else if (this.title === undefined) {
-                this.castRequest(store.tvCastApiUrl);
-            };
+                    if (this.cast.length > 5) {
+                        this.cast.length = 5;
+                        // console.log(this.cast);
+                    };
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
     },
     mounted() {
@@ -66,7 +61,8 @@ export default {
         // console.log(this.fullStarCount);
         // console.log(this.emptyStarsCount);
         // console.log(this.id);
-        this.displayCast()
+        /* this.displayCast() */
+        this.castRequest(this.castUrl)
     }
 }
 </script>
@@ -94,14 +90,11 @@ export default {
                 <span v-for="actor in cast"> {{ actor }}, </span>
                 <span> ...</span>
             </li>
+            <li class="genres">
+                <span class="bold">Generi: </span> <span v-for="genre in genreIds">{{ genre }}, </span>
+            </li>
             <li v-if="language" class="language">
                 <span :class="`lang-icon lang-icon-${language}`"></span>
-            </li>
-            <li class="badge" v-if="title">
-                <i class="fa-solid fa-film"></i>
-            </li>
-            <li class="badge" v-if="name">
-                <i class="fa-solid fa-tv"></i>
             </li>
         </ul>
     </div>
@@ -166,18 +159,6 @@ export default {
         }
 
         .language {
-            position: absolute;
-            bottom: 1rem;
-            left: 1rem;
-        }
-
-        .badge {
-            background-color: darkturquoise;
-            padding: 0.3rem 0.3rem 0.2rem;
-            font-size: 2rem;
-            font-weight: bold;
-            border-radius: 0.5rem;
-            width: fit-content;
             position: absolute;
             bottom: 1rem;
             right: 1rem;

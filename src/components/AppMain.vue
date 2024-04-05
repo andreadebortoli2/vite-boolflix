@@ -11,6 +11,9 @@ export default {
         return {
             store,
         }
+    },
+    mounted() {
+        store.generateGenreLists()
     }
 }
 </script>
@@ -21,7 +24,8 @@ export default {
         <div class="search_response">
             <ContentCard :id="content.id" :image="content.poster_path" :title="content.title"
                 :originalTitle="content.original_title" :language="content.original_language"
-                :vote="content.vote_average" :overview="content.overview" v-for="content in store.searchedMovieList" />
+                :vote="content.vote_average" :overview="content.overview" :castUrl="store.movieCastApiUrl"
+                :genreIds="content.genre_ids" v-for="content in store.searchedMovieList" />
             <div class="empty_array_message"
                 v-if="store.searchedMovieList !== null && store.searchedMovieList.length === 0">
                 NESSUN RISULTATO TROVATO
@@ -33,7 +37,8 @@ export default {
         <div class="search_response">
             <ContentCard :id="content.id" :image="content.poster_path" :title="content.name"
                 :originalTitle="content.original_name" :language="content.original_language"
-                :vote="content.vote_average" :overview="content.overview" v-for="content in store.searchedTvList" />
+                :vote="content.vote_average" :overview="content.overview" :castUrl="store.tvCastApiUrl"
+                :genreIds="content.genre_ids" v-for="content in store.searchedTvList" />
             <div class="empty_array_message" v-if="store.searchedTvList !== null && store.searchedTvList.length === 0">
                 NESSUN RISULTATO TROVATO
             </div>
