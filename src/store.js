@@ -12,7 +12,7 @@ export const store = reactive({
     genresListTvUrl: 'https://api.themoviedb.org/3/genre/tv/list',
     genresListMovie: [],
     genresListTv: [],
-    // debug searchText has to be ''(empty)
+    // debug before finish reset searchText has ''(empty string)
     searchText: 'la montagna sacra',
     searchedMovieList: null,
     searchedTvList: null,

@@ -14,6 +14,7 @@ export default {
         overview: String,
         castUrl: String,
         genreIds: Array,
+        genresList: Array,
     },
     data() {
         return {
@@ -22,21 +23,19 @@ export default {
             fullStarCount: '',
             emptyStarsCount: '',
             cast: [],
+            genres: [],
         }
     },
     methods: {
         calcFullStars() {
-            this.fullStarCount = Math.ceil(this.vote / 2)
+            this.fullStarCount = Math.ceil(this.vote / 2);
         },
         calcEmptyStars() {
-            this.emptyStarsCount = 5 - this.fullStarCount
+            this.emptyStarsCount = 5 - this.fullStarCount;
         },
         castRequest(url) {
-
             const requestUrl = `${url}${this.id}/credits?api_key=${store.apiKey}`;
-
             // console.log(castUrl);
-
             axios.get(requestUrl)
                 .then((response) => {
                     // console.log(response.data.cast);
@@ -52,7 +51,17 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
-        }
+        },
+        transformGenres() {
+            this.genreIds.forEach(id => {
+                this.genresList.forEach(genre => {
+                    if (genre.id === id) {
+                        this.genres.push(genre.name);
+                        // console.log(this.genres);
+                    };
+                });
+            });
+        },
     },
     mounted() {
         // console.log(this.posterSrc);
@@ -61,8 +70,8 @@ export default {
         // console.log(this.fullStarCount);
         // console.log(this.emptyStarsCount);
         // console.log(this.id);
-        /* this.displayCast() */
-        this.castRequest(this.castUrl)
+        this.castRequest(this.castUrl);
+        this.transformGenres();
     }
 }
 </script>
@@ -71,30 +80,33 @@ export default {
     <div class="card">
         <img v-if="image" :src="posterSrc" alt="">
         <ul>
+            <li v-if="language" class="language">
+                <span :class="`lang-icon lang-icon-${language}`"></span>
+            </li>
             <li v-if="title">
-                <span class="bold">Titolo:</span> {{ title }}
+                <span class="bold">Titolo:</span>{{ title }}
             </li>
             <li class="original_title" v-if="title !== originalTitle">
-                <span class="bold">Titolo originale:</span> {{ originalTitle }}
+                <span class="bold">Titolo originale:</span>{{ originalTitle }}
             </li>
             <li v-if="vote">
-                <span class="bold">Voto: </span>
+                <span class="bold">Voto:</span>
                 <span v-for="n in fullStarCount"><i class="fa-solid fa-star"></i></span>
                 <span v-for="n in emptyStarsCount"><i class="fa-regular fa-star"></i></span>
             </li>
             <li v-if="overview" class="overview">
-                <span class="bold">Trama:</span> {{ overview }}
+                <span class="bold">Trama:</span>{{ overview }}
             </li>
             <li class="cast" v-if="cast.length > 0">
-                <span class="bold">Cast: </span>
-                <span v-for="actor in cast"> {{ actor }}, </span>
+                <span class="bold">Cast:</span>
+                <span v-for="actor in cast">{{ actor }}, </span>
                 <span> ...</span>
             </li>
-            <li class="genres">
-                <span class="bold">Generi: </span> <span v-for="genre in genreIds">{{ genre }}, </span>
-            </li>
-            <li v-if="language" class="language">
-                <span :class="`lang-icon lang-icon-${language}`"></span>
+            <li class="genres_list" v-if="genres.length > 0">
+                <div class="bold">Generi:</div>
+                <div class="genre">
+                    <div v-for="genre in genres">{{ genre }}</div>
+                </div>
             </li>
         </ul>
     </div>
@@ -110,6 +122,7 @@ export default {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 150px;
+    overflow: hidden;
 
 
     &:hover {
@@ -124,19 +137,30 @@ export default {
     }
 
     ul {
-        display: none;
+        /* display: none; */
         background-color: rgba(0, 0, 0, 0.7);
         width: 100%;
         height: 100%;
         color: ivory;
         list-style: none;
-        padding: 0.5rem 1rem 4rem;
+        padding: 2rem 1rem 0;
         position: absolute;
         bottom: 0;
         line-height: 1.5rem;
 
         li {
             padding: 0.3rem 0;
+        }
+
+        .bold {
+            font-weight: bolder;
+            padding-right: 0.4rem;
+        }
+
+        .language {
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
         }
 
         .original_title {
@@ -154,14 +178,20 @@ export default {
             line-height: 2rem;
         }
 
-        .bold {
-            font-weight: bolder;
-        }
+        .genres_list {
+            display: flex;
 
-        .language {
-            position: absolute;
-            bottom: 1rem;
-            right: 1rem;
+            .genre {
+                display: flex;
+                flex-wrap: wrap;
+
+                div {
+                    margin: 0.2rem;
+                    padding: 0 0.2rem;
+                    background-color: slategray;
+                    border-radius: 0.2rem;
+                }
+            }
         }
     }
 }

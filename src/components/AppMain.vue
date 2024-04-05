@@ -25,7 +25,8 @@ export default {
             <ContentCard :id="content.id" :image="content.poster_path" :title="content.title"
                 :originalTitle="content.original_title" :language="content.original_language"
                 :vote="content.vote_average" :overview="content.overview" :castUrl="store.movieCastApiUrl"
-                :genreIds="content.genre_ids" v-for="content in store.searchedMovieList" />
+                :genreIds="content.genre_ids" :genresList="store.genresListMovie"
+                v-for="content in store.searchedMovieList" />
             <div class="empty_array_message"
                 v-if="store.searchedMovieList !== null && store.searchedMovieList.length === 0">
                 NESSUN RISULTATO TROVATO
@@ -38,7 +39,8 @@ export default {
             <ContentCard :id="content.id" :image="content.poster_path" :title="content.name"
                 :originalTitle="content.original_name" :language="content.original_language"
                 :vote="content.vote_average" :overview="content.overview" :castUrl="store.tvCastApiUrl"
-                :genreIds="content.genre_ids" v-for="content in store.searchedTvList" />
+                :genreIds="content.genre_ids" :genresList="store.genresListTv"
+                v-for="content in store.searchedTvList" />
             <div class="empty_array_message" v-if="store.searchedTvList !== null && store.searchedTvList.length === 0">
                 NESSUN RISULTATO TROVATO
             </div>
@@ -56,7 +58,11 @@ export default {
 }
 
 h2 {
-    padding: 1rem 0;
+    padding: 1rem 2rem;
+    color: ivory;
+    background-color: darkcyan;
+    width: fit-content;
+    border-radius: 0.5rem;
 }
 
 .empty_array_message {
