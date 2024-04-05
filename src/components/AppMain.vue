@@ -16,14 +16,28 @@ export default {
 </script>
 
 <template>
-    <div class="search_response container">
-        <ContentCard :id="content.id" :image="content.poster_path" :title="content.title" :name="content.name"
-            :originalTitle="content.original_title" :originalName="content.original_name"
-            :language="content.original_language" :vote="content.vote_average" :overview="content.overview"
-            v-for="content in store.searchedList" />
+    <div class="container">
+        <h2 v-if="store.searchedMovieList !== null">MOVIES</h2>
+        <div class="search_response">
+            <ContentCard :id="content.id" :image="content.poster_path" :title="content.title"
+                :originalTitle="content.original_title" :language="content.original_language"
+                :vote="content.vote_average" :overview="content.overview" v-for="content in store.searchedMovieList" />
+            <div class="empty_array_message"
+                v-if="store.searchedMovieList !== null && store.searchedMovieList.length === 0">
+                NESSUN RISULTATO TROVATO
+            </div>
+        </div>
     </div>
-    <div class="empty_array_message" v-if="store.searchedList !== null && store.searchedList.length === 0">
-        NESSUN RISULTATO TROVATO
+    <div class="container">
+        <h2 v-if="store.searchedTvList !== null">TV SHOWS</h2>
+        <div class="search_response">
+            <ContentCard :id="content.id" :image="content.poster_path" :title="content.name"
+                :originalTitle="content.original_name" :language="content.original_language"
+                :vote="content.vote_average" :overview="content.overview" v-for="content in store.searchedTvList" />
+            <div class="empty_array_message" v-if="store.searchedTvList !== null && store.searchedTvList.length === 0">
+                NESSUN RISULTATO TROVATO
+            </div>
+        </div>
     </div>
 </template>
 
@@ -31,8 +45,13 @@ export default {
 <style>
 .search_response {
     display: flex;
-    flex-wrap: wrap;
     gap: 5px;
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+h2 {
+    padding: 1rem 0;
 }
 
 .empty_array_message {
